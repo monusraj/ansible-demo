@@ -1,7 +1,19 @@
 ---
 - hosts: servers
-
+  gather_facts: no
   tasks:
     - name:   installing httpd
       yum:    pkg=httpd state=installed
       become: true
+
+    - name: start apache
+      service: name=httpd state=started
+      become: true
+      register: httpd_output
+
+    - name: printng httpd output
+      debug: var=httpd_output
+
+    - name: printintg status
+      debug: msg="my automtion is successful"
+      when: httpd_output is succeeded
